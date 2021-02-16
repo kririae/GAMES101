@@ -9,21 +9,26 @@
 class Object;
 class Sphere;
 
-struct Intersection
-{
-    Intersection(){
-        happened=false;
-        coords=Vector3f();
-        normal=Vector3f();
-        distance= std::numeric_limits<double>::max();
-        obj =nullptr;
-        m=nullptr;
-    }
-    bool happened;
-    Vector3f coords;
-    Vector3f normal;
-    double distance;
-    Object* obj;
-    Material* m;
+struct Intersection {
+  Intersection() {
+    happened = false;
+    coords = Vector3f();
+    normal = Vector3f();
+    distance = std::numeric_limits<double>::max();
+    obj = nullptr;
+    m = nullptr;
+  }
+  bool happened;
+
+  // Intersect position
+  Vector3f coords;
+
+  // Interpolation of the vertex normals
+  Vector3f normal;
+
+  // eye_pos -> this->coords
+  double distance;
+  Object *obj;
+  Material *m;
 };
 #endif //RAYTRACING_INTERSECTION_H
