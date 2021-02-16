@@ -5,6 +5,7 @@
 #include <fstream>
 #include "Scene.hpp"
 #include "Renderer.hpp"
+#include "omp.h"
 
 inline float deg2rad(const float &deg) { return deg * M_PI / 180.0; }
 
@@ -19,7 +20,9 @@ void Renderer::Render(const Scene &scene) {
   float scale = tan(deg2rad(scene.fov * 0.5));
   float imageAspectRatio = scene.width / (float) scene.height;
   Vector3f eye_pos(-1, 5, 10);
+  // Vector3f eye_pos(0, 0,  10);
   int m = 0;
+#pragma omp parallel for
   for (uint32_t j = 0; j < scene.height; ++j) {
     for (uint32_t i = 0; i < scene.width; ++i) {
       // generate primary ray direction
@@ -29,10 +32,9 @@ void Renderer::Render(const Scene &scene) {
       Vector3f dir = Vector3f(x, y, -1);
       dir = normalize(dir);
 
-      // TODO: Render the ray.
-      framebuffer[m++] = scene.castRay(Ray(eye_pos, dir), 10);
+      framebuffer[(j * scene.width) + i] = scene.castRay(Ray(eye_pos, dir), 0);
     }
-    UpdateProgress(j / (float) scene.height);
+    UpdateProgress(m++ / (float) scene.height);
   }
   UpdateProgress(1.f);
 

@@ -225,8 +225,7 @@ inline Intersection Triangle::getIntersection(Ray ray) {
   // TODO: Initialize the Intersection
   if (t_tmp > 0) {
     inter.happened = true;
-    inter.coords = float(u) * v0 + float(v) * v1 + float(1.f - u - v) * v2;
-
+    inter.coords = ray(t_tmp);
     // TODO: add interpolation
     inter.normal = normal;
     inter.distance = t_tmp;
