@@ -13,4 +13,51 @@
    H = \frac{\Delta\Phi}{\Delta A} = \frac{\Delta q}{\Delta A \Delta t \Delta \lambda}
    $$
 
-4. **Radiance**（辐射）。其被定义的原因是，光线与某个面作用的时候，还需要考虑作用的方向。Irradiance 只能用于衡量作用的总量，但是不能衡量作用的方向。那，再对立体角进行一次微分即可。即 $\Delta H / \Delta \sigma$。其物理意义大致是 光线与某个面作用时，在某个方向上的能量。**但是有个问题**，即：侧面入射的光线，一定会被“某个面”完全吸收吗？必然是不可能的，转化为 $\Delta H / (\Delta \sigma \cos \theta)$
+4. **Radiance**（辐射）。其被定义的原因是，光线与某个面作用的时候，还需要考虑作用的方向。Irradiance 只能用于衡量作用的总量，但是不能衡量作用的方向。那，再对立体角进行一次微分即可。即 $\Delta H / \Delta \sigma$。其物理意义大致是 光线与某个面作用时，在某个方向上的能量。教材上的图示似乎有点问题… 因为 $\Delta A$ 是针对我们使用的表面定义的，假设这个表面是水平的，而我们在水平的表面上接收到的是 $r$，那么原本射入的 radiance 应该更大才对，即我们使用的 $r/\cos\theta$， $\Delta H / (\Delta \sigma \cos \theta)$
+
+   （上面这段我折腾了好久，最后总结起来就是一句话。radiance 的定义是针对平面的）
+
+   然后我们定义两个东西，$L_s$ 为 surface radiance，表示“离开”某个 surface 的 radiance，而 $L_f$ 表示进入某个表面的 radiance。
+
+5. $$
+   H = \int_{\mathrm{all} \ \bold{k}}{L_f(\bold{k}) \cos \theta  \ \mathrm{d}\sigma}
+   $$
+   （顺带提醒一下，$H$ 表示进入，$E$ 表示离开）
+
+   这个公式说明了，进入某个面的 irradiance 是这个面的 field radiance 的积分。$\bold{k}$ 表示所有接近进入这个面的向量。将公式进行二元积分得到，在每个方向上 field radiance 相同的情况下 $H = \pi L_f$（懒得抄公式了）
+   
+   类似地，也可以积分出 $\Phi = \displaystyle\int_{\mathrm{all} \  \bold{x}}{H(\bold{x}) \ \mathrm{d} A}$，可以在一定条件下从 radiance 一直得到 power.
+   
+### BRDF
+
+   > > We would like to characterize how a surface reflects light.
+   > >
+   > > > 对物理世界的精确或者不精确抽象构成了计算机图形学
+
+这便是 BRDF 的动机。目前我们都是基于 $\Delta A$ 在考虑，则 BRDF 的最基本能完成一个 $(\bold{k}_i, \bold{k}_o)$ 的映射。
+
+我们应用比值定义一个函数
+$$
+\rho = \frac{L_s}{H}
+$$
+而这个比值 $\rho$ 会随着 $(\bold{k}_i, \bold{k}_o)$ 的变化而变化。这就是 BRDF，*bidirectional reflectance distribution function*。
+
+定义 *directional hemispherical reflectance(定向半球反射)* 为
+$$
+R(\bold{k}_i) = \frac{\text{power of all the corresponding } \bold{k}_o}{\text{in power of a certain } \bold{k}_i}
+$$
+且 $R(\bold{k}_i) \in [0, 1]$，因为可能存在能量吸收的问题。
+
+此处略过一个推导，
+$$
+R(\bold{k}_i) = \int_{\mathrm{all} \ \bold{k}_0}{\rho(\bold{k}_i, \bold{k}_o) \cos \theta_o \ \mathrm{d} \sigma_o}
+$$
+即定向半球反射率是 BRDF 在所有方向上的积分。
+
+#### Ideal Diffuse BRDF
+
+在 Lambertian BRDF 模型中，$\rho \equiv C$，于是我们积分得到 $R(\bold{k}_i) = \pi C$。
+
+## Transport Equation
+
+> >  [TODO]
