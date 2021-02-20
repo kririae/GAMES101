@@ -90,9 +90,11 @@ inline bool Bounds3::IntersectP(const Ray &ray, const Vector3f &invDir,
     std::swap(t_min.y, t_max.y);
   if (t_min.z > t_max.z)
     std::swap(t_min.z, t_max.z);
+
   float t_ent = std::max(t_min.x, std::max(t_min.y, t_min.z))
   , t_exi = std::min(t_max.x, std::min(t_max.y, t_max.z));
 
+  // TODO: Check t_ent == t_exi
   return t_ent < t_exi && t_exi >= 0;
 }
 
