@@ -37,9 +37,10 @@ inline float get_random_float() {
   return dist(rng);
 }
 
-inline void UpdateProgress(float progress) {
+inline void UpdateProgress(float progress, float t) {
   int barWidth = 70;
 
+  std::cout << "Estimate time: " << t / 60. << " min; ";
   std::cout << "[";
   int pos = barWidth * progress;
   for (int i = 0; i < barWidth; ++i) {

@@ -80,8 +80,6 @@ public:
 
 inline bool Bounds3::IntersectP(const Ray &ray, const Vector3f &invDir,
                                 const std::array<int, 3> &dirIsNeg) const {
-  // dirIsNeg: ray direction(x,y,z), dirIsNeg=[int(x>0),int(y>0),int(z>0)], use this to simplify your logic
-
   Vector3f t_min = (pMin - ray.origin) * invDir
   , t_max = (pMax - ray.origin) * invDir;
   if (t_min.x > t_max.x)
@@ -94,8 +92,7 @@ inline bool Bounds3::IntersectP(const Ray &ray, const Vector3f &invDir,
   float t_ent = std::max(t_min.x, std::max(t_min.y, t_min.z))
   , t_exi = std::min(t_max.x, std::min(t_max.y, t_max.z));
 
-  // TODO: Check t_ent == t_exi
-  return t_ent < t_exi && t_exi >= 0;
+  return t_ent <= t_exi && t_exi >= 0;
 }
 
 inline Bounds3 Union(const Bounds3 &b1, const Bounds3 &b2) {
