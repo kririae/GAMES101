@@ -30,8 +30,6 @@ Rope::Rope(Vector2D start, Vector2D end, int num_nodes, float node_mass, float k
 }
 
 void Rope::simulateEuler(float delta_t, Vector2D gravity) {
-  double damping_factor = 20;
-
   for (auto &s : springs) {
     auto &a = s->m1->position
     , &b = s->m2->position;
@@ -53,8 +51,6 @@ void Rope::simulateEuler(float delta_t, Vector2D gravity) {
 
       Vector2D a = m->forces / m->mass;
       m->velocity += a * delta_t;
-
-      m->start_position = m->position;
       m->position += m->velocity * delta_t;
     }
 
@@ -64,8 +60,9 @@ void Rope::simulateEuler(float delta_t, Vector2D gravity) {
 }
 
 void Rope::simulateVerlet(float delta_t, Vector2D gravity) {
+  static double damping_factor = 1e-4;
+
   for (auto &s : springs) {
-    // TODO (Part 3): Simulate one timestep of the rope
     auto &a = s->m1->position
     , &b = s->m2->position;
     double actual_len = (b - a).norm();
@@ -79,10 +76,13 @@ void Rope::simulateVerlet(float delta_t, Vector2D gravity) {
   for (auto &m : masses) {
     if (!m->pinned) {
       Vector2D temp_position = m->position;
-      // TODO (Part 3.1): Set the new position of the rope mass
 
-      // TODO (Part 4): Add global Verlet damping
+      m->forces += gravity;
+      Vector2D a = m->forces / m->mass;
+      m->position += (1 - damping_factor) * (m->position - m->last_position) + a * delta_t * delta_t;
+      m->last_position = temp_position;
     }
+    m->forces = Vector2D(0, 0);
   }
 }
 }
